@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
+    "@makerdao/multicall": "^0.12.0",
     "@radix-ui/react-navigation-menu": "^1.2.0",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-slot": "^1.0.2",
@@ -20,6 +21,7 @@
     "ethers": "^6.13.1",
     "lucide-react": "0.105.0-alpha.4",
     "next": "^13.4.3",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^1.13.2",
