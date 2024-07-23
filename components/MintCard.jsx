@@ -1,3 +1,4 @@
+/* global BigInt */
 import React, { useState, useEffect } from "react"
 import { useAccount, usePublicClient, useWalletClient } from "wagmi"
 import { parseEther, parseGwei } from "viem"
@@ -104,7 +105,7 @@ const GeneTable = ({ data, onMint }) => {
 }
 
 export default function MintCard() {
-  const [isMinting, setIsMinting] = useState(false)
+  const [, setIsMinting] = useState(false)
   const [error, setError] = useState("")
   const [gene, setGene] = useState(null)
   const [progress, setProgress] = useState(0)

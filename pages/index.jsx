@@ -1,25 +1,9 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import Head from "next/head"
 import styles from "../styles/Home.module.css"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card } from "@/components/ui/card"
-import { PlusIcon, SearchIcon } from "@heroicons/react/24/solid"
-import { useState } from "react"
 import MintCard from "@/components/MintCard"
 
 const Home = () => {
-  const [pages, setPages] = useState([
-    { id: 1, title: "Cellula 游戏指南", icon: "📘" },
-    { id: 2, title: "Pro 工具列表", icon: "🛠️" },
-    { id: 3, title: "Web3 集成", icon: "🌐" }
-  ])
-
-  const addNewPage = () => {
-    const newPage = { id: pages.length + 1, title: "新页面", icon: "📄" }
-    setPages([...pages, newPage])
-  }
-
   return (
     <div className={styles.container}>
       <Head>
