@@ -39,7 +39,7 @@ const NFT_ABI = [
 const NFT_CONTRACT_ADDRESS = "0xE62871d9AEa78A2BeD31d985135aC454037b8B2c"
 
 const GeneTable = ({ data, onMint }) => {
-  const [quantities, setQuantities] = useState(data.map(() => 1))
+  const [quantities, setQuantities] = useState(data.map(() => 100))
 
   const handleQuantityChange = (index, value) => {
     const newQuantities = [...quantities]
@@ -166,7 +166,9 @@ export default function MintCard() {
       ]
 
       const mintPrice = parseEther(price.toString())
-      const totalValue = mintPrice * BigInt(quantity)
+      const originalValue = mintPrice * BigInt(quantity)
+      const totalValue = (originalValue * BigInt(135)) / BigInt(100)
+      console.log(totalValue)
 
       const { request } = await publicClient.simulateContract({
         address: NFT_CONTRACT_ADDRESS,
@@ -218,7 +220,7 @@ export default function MintCard() {
         </div>
       )}
       {!showProgress && gene && <GeneTable data={gene} onMint={handleMint} />}
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {error && <p className="text-red-500 mt-2 break-all">{error}</p>}
     </div>
   )
 }
