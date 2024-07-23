@@ -1,5 +1,4 @@
 // pages/api/get-gene.js
-import axios from "axios"
 import { ethers } from "ethers"
 
 const CONTRACT_ADDRESS = "0xa258107Cb9dCD325a37c7d65A7f4850bb9986BC6"
@@ -53,10 +52,14 @@ async function getLifePrice(tokenId) {
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
-      const response = await axios.get(
+      const response = await fetch(
         "https://factoryapi.cellula.life/cells?pageNum=1&pageSize=10000"
       )
-      let list = response.data.data.list
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      let list = data.data.list
 
       // 为每个元素添加价格
       for (let item of list) {
