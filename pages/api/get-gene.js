@@ -1,6 +1,10 @@
 // pages/api/get-gene.js
 import { ethers } from "ethers"
 
+export const config = {
+  runtime: "edge"
+}
+
 const CONTRACT_ADDRESS = "0xa258107Cb9dCD325a37c7d65A7f4850bb9986BC6"
 const ABI = [
   {
@@ -26,7 +30,6 @@ const ABI = [
   }
 ]
 
-// BSC 主网 RPC URL
 const RPC_URL = "https://bsc-dataseed.binance.org/"
 
 async function getLifePrice(tokenId) {
@@ -37,7 +40,6 @@ async function getLifePrice(tokenId) {
     const cells = [tokenId, tokenId]
     const prices = await contract.getLifePrice(cells)
 
-    // 将 BigInt 转换为 ETH 单位并相加
     const totalPriceInEth = prices.reduce((sum, price) => {
       return sum + Number(ethers.formatEther(price))
     }, 0)
@@ -49,36 +51,45 @@ async function getLifePrice(tokenId) {
   }
 }
 
-export default async function handler(req, res) {
-  if (req.method === "GET") {
-    try {
-      const response = await fetch(
-        "https://factoryapi.cellula.life/cells?pageNum=1&pageSize=10000"
-      )
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      const data = await response.json()
-      let list = data.data.list
+export default async function handler(request) {
+  if (request.method !== "GET") {
+    return new Response("Method Not Allowed", { status: 405 })
+  }
 
-      // 为每个元素添加价格
-      for (let item of list) {
-        item.price = await getLifePrice(item.tokenId)
-      }
-
-      // 按价格升序排序
-      list.sort((a, b) => a.price - b.price)
-
-      // 只返回前10个元素作为示例
-      const topTen = list.slice(0, 10)
-
-      res.status(200).json({ gene: topTen })
-    } catch (error) {
-      console.error("Error processing request:", error)
-      res.status(500).json({ error: "Internal server error" })
+  try {
+    const response = await fetch(
+      "https://factoryapi.cellula.life/cells?pageNum=1&pageSize=10000"
+    )
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
-  } else {
-    res.setHeader("Allow", ["GET"])
-    res.status(405).end(`Method ${req.method} Not Allowed`)
+    const data = await response.json()
+    let list = data.data.list
+
+    // 为每个元素添加价格
+    for (let item of list) {
+      item.price = await getLifePrice(item.tokenId)
+    }
+
+    // 按价格升序排序
+    list.sort((a, b) => a.price - b.price)
+
+    // 只返回前10个元素
+    const topTen = list.slice(0, 10)
+
+    return new Response(JSON.stringify({ gene: topTen }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+  } catch (error) {
+    console.error("Error processing request:", error)
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
   }
 }
