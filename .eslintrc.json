@@ -1,5 +1,4 @@
 {
-  "plugins": ["prettier"],
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
@@ -14,6 +13,6 @@
     "react/jsx-pascal-case": [1, { "allowAllCaps": true, "ignore": [] }],
     "comma-dangle": [1, "never"],
     "react/prop-types": "off",
-    "prettier/prettier": ["error", {}, { "usePrettierrc": false }]
+    "prettier/prettier": "off"
   }
 }
