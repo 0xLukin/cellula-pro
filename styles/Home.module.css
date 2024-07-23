@@ -4,7 +4,7 @@
 
 .main {
   min-height: 100vh;
-  padding: 4rem 0;
+  padding: 1rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -99,4 +99,32 @@
     width: 100%;
     flex-direction: column;
   }
+}
+
+@font-face {
+  font-family: "PixelFont";
+  src: url("/path-to-your-pixel-font.woff2") format("woff2");
+}
+
+.pixel-font {
+  font-family: "PixelFont", monospace;
+  image-rendering: pixelated;
+}
+
+.pixel-text {
+  text-shadow: 1px 1px 0 #999;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+.pixel-button {
+  border: 2px solid #45a049;
+  box-shadow: 2px 2px 0 #333;
+}
+
+.pixel-button:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #333;
 }
