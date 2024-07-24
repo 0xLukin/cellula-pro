@@ -46,66 +46,79 @@ const GeneTable = ({ data, onMint, onGetPrice }) => {
     newQuantities[index] = Math.max(1, parseInt(value) || 1)
     setQuantities(newQuantities)
   }
+
+  const handleMintAll = () => {
+    const mintButtons = document.querySelectorAll("[data-mint-button]")
+    mintButtons.forEach((button) => button.click())
+  }
   return (
-    <Table>
-      <TableCaption>Gene 数据列表</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Token ID</TableHead>
-          <TableHead>Living Num</TableHead>
-          <TableHead>Num Str</TableHead>
-          <TableHead>Price (ETH)</TableHead>
-          <TableHead>Image</TableHead>
-          <TableHead>Quantity</TableHead>
-          <TableHead>Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((item, index) => (
-          <TableRow key={item.tokenId}>
-            <TableCell>{item.tokenId}</TableCell>
-            <TableCell>{item.livingNum}</TableCell>
-            <TableCell>{item.numStr}</TableCell>
-            <TableCell>{item.price.toFixed(18)}</TableCell>
-            <TableCell>
-              <Button
-                onClick={() => window.open(item.image, "_blank")}
-                variant="outline"
-                size="sm"
-              >
-                查看图片
-              </Button>
-            </TableCell>
-            <TableCell>
-              <Input
-                type="number"
-                min="1"
-                max="100"
-                value={quantities[index]}
-                onChange={(e) => handleQuantityChange(index, e.target.value)}
-                className="w-20"
-              />
-            </TableCell>
-            <TableCell>
-              <Button
-                onClick={() => onMint(item.tokenId, quantities[index])}
-                variant="default"
-                size="sm"
-              >
-                Mint
-              </Button>
-              {/* <Button
+    <div>
+      <div className="flex justify-end mb-4">
+        <Button onClick={handleMintAll} variant="default" size="sm">
+          Mint All
+        </Button>
+      </div>
+      <Table>
+        <TableCaption>Gene 数据列表</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Token ID</TableHead>
+            <TableHead>Living Num</TableHead>
+            <TableHead>Num Str</TableHead>
+            <TableHead>Price (ETH)</TableHead>
+            <TableHead>Image</TableHead>
+            <TableHead>Quantity</TableHead>
+            <TableHead>Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((item, index) => (
+            <TableRow key={item.tokenId}>
+              <TableCell>{item.tokenId}</TableCell>
+              <TableCell>{item.livingNum}</TableCell>
+              <TableCell>{item.numStr}</TableCell>
+              <TableCell>{item.price.toFixed(18)}</TableCell>
+              <TableCell>
+                <Button
+                  onClick={() => window.open(item.image, "_blank")}
+                  variant="outline"
+                  size="sm"
+                >
+                  查看图片
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Input
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={quantities[index]}
+                  onChange={(e) => handleQuantityChange(index, e.target.value)}
+                  className="w-20"
+                />
+              </TableCell>
+              <TableCell>
+                <Button
+                  onClick={() => onMint(item.tokenId, quantities[index])}
+                  variant="default"
+                  size="sm"
+                  data-mint-button
+                >
+                  Mint
+                </Button>
+                {/* <Button
                 onClick={() => onGetPrice(item.tokenId, quantities[index])}
                 variant="outline"
                 size="sm"
               >
                 Get Price
               </Button> */}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   )
 }
 
@@ -202,7 +215,7 @@ export default function MintCard() {
 
       await publicClient.waitForTransactionReceipt({ hash })
 
-      alert("NFT 铸造成功!")
+      // alert("NFT 铸造成功!")
     } catch (err) {
       console.error("操作失败:", err)
       setError(`操作失败，请重试。错误: ${err.message || "未知错误"}`)
@@ -231,6 +244,7 @@ export default function MintCard() {
       setError("获取价格失败,请重试")
     }
   }
+
   return (
     <div className="bg-white shadow-md rounded-lg p-6 mx-auto">
       <h2 className="text-2xl font-bold mb-4">铸造 NFT</h2>
