@@ -38,7 +38,7 @@ const NFT_ABI = [
 
 const NFT_CONTRACT_ADDRESS = "0xE62871d9AEa78A2BeD31d985135aC454037b8B2c"
 
-const GeneTable = ({ data, onMint }) => {
+const GeneTable = ({ data, onMint, onGetPrice }) => {
   const [quantities, setQuantities] = useState(data.map(() => 100))
 
   const handleQuantityChange = (index, value) => {
@@ -46,7 +46,6 @@ const GeneTable = ({ data, onMint }) => {
     newQuantities[index] = Math.max(1, parseInt(value) || 1)
     setQuantities(newQuantities)
   }
-
   return (
     <Table>
       <TableCaption>Gene 数据列表</TableCaption>
@@ -88,14 +87,19 @@ const GeneTable = ({ data, onMint }) => {
             </TableCell>
             <TableCell>
               <Button
-                onClick={() =>
-                  onMint(item.tokenId, item.price, quantities[index])
-                }
+                onClick={() => onMint(item.tokenId, quantities[index])}
                 variant="default"
                 size="sm"
               >
                 Mint
               </Button>
+              {/* <Button
+                onClick={() => onGetPrice(item.tokenId, quantities[index])}
+                variant="outline"
+                size="sm"
+              >
+                Get Price
+              </Button> */}
             </TableCell>
           </TableRow>
         ))}
@@ -145,7 +149,7 @@ export default function MintCard() {
     }
   }
 
-  const handleMint = async (tokenId, price, quantity) => {
+  const handleMint = async (tokenId, quantity) => {
     if (!address || !walletClient) {
       setError("请先连接钱包")
       return
@@ -160,15 +164,28 @@ export default function MintCard() {
     setError("")
 
     try {
+      // 首先获取价格
+      const priceResponse = await fetch("/api/get-price", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ nftIds: [tokenId, tokenId], quantity })
+      })
+
+      if (!priceResponse.ok) {
+        throw new Error("获取价格失败")
+      }
+
+      const priceData = await priceResponse.json()
+      const price = parseEther(priceData.price)
+
       const geneData = [
         [tokenId, 1],
         [tokenId, 2]
       ]
 
-      const mintPrice = parseEther(price.toString())
-      const originalValue = mintPrice * BigInt(quantity)
-      const totalValue = (originalValue * BigInt(142)) / BigInt(100)
-      console.log(totalValue)
+      const totalValue = (price * BigInt(101)) / BigInt(100)
 
       const { request } = await publicClient.simulateContract({
         address: NFT_CONTRACT_ADDRESS,
@@ -186,26 +203,31 @@ export default function MintCard() {
 
       alert("NFT 铸造成功!")
     } catch (err) {
-      console.error("合约调用错误:", err)
-
-      // 打印详细的错误信息
-      if (err.cause) {
-        console.error("错误原因:", err.cause)
-      }
-
-      if (err.data) {
-        console.error("错误数据:", err.data)
-      }
-
-      if (err.message) {
-        console.error("错误消息:", err.message)
-      }
-
-      // 如果错误对象包含更多信息，可以继续添加更多的错误属性打印
-
-      setError(`铸造失败，请重试。错误: ${err.message || "未知错误"}`)
+      console.error("操作失败:", err)
+      setError(`操作失败，请重试。错误: ${err.message || "未知错误"}`)
     } finally {
       setIsMinting(false)
+    }
+  }
+  const handleGetPrice = async (tokenId, quantity) => {
+    try {
+      const response = await fetch("/api/get-price", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ nftIds: [tokenId, tokenId], quantity })
+      })
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok")
+      }
+
+      const data = await response.json()
+      alert(`Price for TokenID ${tokenId}: ${data.price} ETH`)
+    } catch (error) {
+      console.error("获取价格失败:", error)
+      setError("获取价格失败,请重试")
     }
   }
   return (
