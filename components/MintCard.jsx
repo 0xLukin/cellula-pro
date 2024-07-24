@@ -80,6 +80,7 @@ const GeneTable = ({ data, onMint, onGetPrice }) => {
               <Input
                 type="number"
                 min="1"
+                max="100"
                 value={quantities[index]}
                 onChange={(e) => handleQuantityChange(index, e.target.value)}
                 className="w-20"
