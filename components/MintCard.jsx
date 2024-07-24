@@ -167,7 +167,7 @@ export default function MintCard() {
 
       const mintPrice = parseEther(price.toString())
       const originalValue = mintPrice * BigInt(quantity)
-      const totalValue = (originalValue * BigInt(135)) / BigInt(100)
+      const totalValue = (originalValue * BigInt(142)) / BigInt(100)
       console.log(totalValue)
 
       const { request } = await publicClient.simulateContract({
