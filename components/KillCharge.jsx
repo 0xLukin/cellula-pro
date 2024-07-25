@@ -60,7 +60,7 @@ const NFTCollection = ({ nfts }) => {
               />
               <h3 className="font-semibold">Token ID: {nft.tokenId}</h3>
               <p>Hash Rate: {nft.hashRate}</p>
-              <p>Mint Price: {nft.mintPrice}</p>
+              {/* <p>Mint Price: {nft.mintPrice}</p> */}
             </CardContent>
           </Card>
         ))}
