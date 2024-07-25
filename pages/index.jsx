@@ -2,6 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit"
 import Head from "next/head"
 import styles from "../styles/Home.module.css"
 import MintCard from "@/components/MintCard"
+import KillCharge from "@/components/KillCharge"
 
 const Home = () => {
   return (
@@ -55,27 +56,13 @@ const Home = () => {
               name="my_tabs_2"
               role="tab"
               className="tab"
-              aria-label="Tab 2"
+              aria-label="Charge"
             />
             <div
               role="tabpanel"
               className="tab-content bg-base-100 border-base-300 rounded-box p-6"
             >
-              Tab content 2
-            </div>
-
-            <input
-              type="radio"
-              name="my_tabs_2"
-              role="tab"
-              className="tab"
-              aria-label="Tab 3"
-            />
-            <div
-              role="tabpanel"
-              className="tab-content bg-base-100 border-base-300 rounded-box p-6"
-            >
-              Tab content 3
+              <KillCharge />
             </div>
           </div>
           <div></div>
@@ -84,7 +71,7 @@ const Home = () => {
 
       <footer className={styles.footer}>
         <a href="https://rainbow.me" rel="noopener noreferrer" target="_blank">
-          Made with ❤️ by your frens at 🌈
+          Made with ❤️ by cellula frens
         </a>
       </footer>
     </div>
