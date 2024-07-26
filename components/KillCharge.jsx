@@ -145,18 +145,22 @@ export default function KillCharge() {
       const charge_ids = []
 
       const ratio = parseInt(chargeDays)
+      const maxChargeCount = 100 // 设置最大充电数量为200
+
       for (
         let i = 0;
         i <
         Math.min(
           Math.floor(destroyableIds.length / ratio),
-          chargeableIds.length
+          chargeableIds.length,
+          maxChargeCount
         );
         i++
       ) {
         recycle_array.push(destroyableIds.slice(i * ratio, (i + 1) * ratio))
         charge_ids.push(chargeableIds[i])
       }
+
       console.log(recycle_array, charge_ids)
       if (recycle_array.length === 0) {
         throw new Error("没有足够的 NFT 进行充电")
@@ -189,7 +193,6 @@ export default function KillCharge() {
       setIsCharging(false)
     }
   }
-
   return (
     <div className="bg-white shadow-md rounded-lg p-6 mx-auto">
       <h2 className="text-2xl font-bold mb-4">销毁换电</h2>
