@@ -63,10 +63,10 @@ const GeneTable = ({ data, onMint }) => {
         <TableCaption>Gene 数据列表</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Token ID</TableHead>
+            <TableHead className="hidden sm:table-cell">ID</TableHead>
             <TableHead className="hidden sm:table-cell">Living Num</TableHead>
             <TableHead className="hidden sm:table-cell">Num Str</TableHead>
-            <TableHead>Price (ETH)</TableHead>
+            <TableHead>Price</TableHead>
             <TableHead className="hidden sm:table-cell">Image</TableHead>
             <TableHead>Quantity</TableHead>
             <TableHead>Action</TableHead>
@@ -75,7 +75,9 @@ const GeneTable = ({ data, onMint }) => {
         <TableBody>
           {data.map((item, index) => (
             <TableRow key={item.tokenId}>
-              <TableCell>{item.tokenId}</TableCell>
+              <TableCell className="hidden sm:table-cell">
+                {item.tokenId}
+              </TableCell>
               <TableCell className="hidden sm:table-cell">
                 {item.livingNum}
               </TableCell>
