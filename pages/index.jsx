@@ -1,11 +1,20 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit"
+import { darkTheme } from "@rainbow-me/rainbowkit"
 import Head from "next/head"
 import styles from "../styles/Home.module.css"
 import MintCard from "@/components/MintCard"
 import KillCharge from "@/components/KillCharge"
 import { FaTwitter, FaTelegram } from "react-icons/fa" // 导入图标
+import Image from "next/image"
 
 const Home = () => {
+  const customTheme = darkTheme({
+    accentColor: "#44cccc",
+    accentColorForeground: "white",
+    borderRadius: "medium",
+    fontStack: "system",
+    overlayBlur: "small"
+  })
   return (
     <div className={styles.container}>
       <Head>
@@ -16,18 +25,25 @@ const Home = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <header className="bg-white text-[#333] border-b-4 border-[#4CAF50] pixel-font">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="bg-[#44cccc] text-[#333] border-b-4 rounded-b-3xl border-white pixel-font">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-[#4CAF50] pixel-text">
+              <Image
+                src="/logo.png"
+                alt="Cellula Pro Logo"
+                width={180}
+                height={124}
+                className="w-auto rounded-[15px] border-2  shadow-md"
+              />
+              {/* <h1 className="text-2xl font-bold text-[#4CAF50] pixel-text">
                 Cellula Pro
-              </h1>
+              </h1> */}
               <a
                 href="https://x.com/cellulapro"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#4CAF50] hover:text-[#45a049]"
+                className="text-white hover:shadow-md"
               >
                 <FaTwitter size={24} />
               </a>
@@ -35,14 +51,115 @@ const Home = () => {
                 href="https://t.me/cellulapro"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#4CAF50] hover:text-[#45a049]"
+                className="text-white hover:shadow-md"
               >
                 <FaTelegram size={24} />
               </a>
             </div>
 
             <div className="flex items-center space-x-4">
-              <ConnectButton />
+              <ConnectButton.Custom>
+                {({
+                  account,
+                  chain,
+                  openAccountModal,
+                  openChainModal,
+                  openConnectModal,
+                  authenticationStatus,
+                  mounted
+                }) => {
+                  const ready = mounted && authenticationStatus !== "loading"
+                  const connected =
+                    ready &&
+                    account &&
+                    chain &&
+                    (!authenticationStatus ||
+                      authenticationStatus === "authenticated")
+
+                  return (
+                    <div
+                      {...(!ready && {
+                        "aria-hidden": true,
+                        style: {
+                          opacity: 0,
+                          pointerEvents: "none",
+                          userSelect: "none"
+                        }
+                      })}
+                    >
+                      {(() => {
+                        if (!connected) {
+                          return (
+                            <button
+                              onClick={openConnectModal}
+                              type="button"
+                              className="bg-[#44cccc] text-white font-bold border-2 border-white rounded-xl px-4 py-2 hover:bg-[#3ab8b8]"
+                            >
+                              连接钱包
+                            </button>
+                          )
+                        }
+
+                        if (chain.unsupported) {
+                          return (
+                            <button
+                              onClick={openChainModal}
+                              type="button"
+                              className="bg-red-500 text-white border-2 border-white rounded-md px-4 py-2 hover:bg-red-600"
+                            >
+                              错误网络
+                            </button>
+                          )
+                        }
+
+                        return (
+                          <div style={{ display: "flex", gap: 12 }}>
+                            <button
+                              onClick={openChainModal}
+                              style={{ display: "flex", alignItems: "center" }}
+                              type="button"
+                              className="bg-[#44cccc] text-white border-2 border-white rounded-md px-4 py-2 hover:bg-[#3ab8b8]"
+                            >
+                              {chain.hasIcon && (
+                                <div
+                                  style={{
+                                    background: chain.iconBackground,
+                                    width: 12,
+                                    height: 12,
+                                    borderRadius: 999,
+                                    overflow: "hidden",
+                                    marginRight: 4
+                                  }}
+                                >
+                                  {chain.iconUrl && (
+                                    <img
+                                      alt={chain.name ?? "Chain icon"}
+                                      src={chain.iconUrl}
+                                      style={{ width: 12, height: 12 }}
+                                    />
+                                  )}
+                                </div>
+                              )}
+                              {chain.name}
+                            </button>
+
+                            <button
+                              onClick={openAccountModal}
+                              type="button"
+                              className="bg-[#44cccc] text-white border-2 border-white rounded-md px-4 py-2 hover:bg-[#3ab8b8]"
+                            >
+                              {account.displayName}
+                              {account.displayBalance
+                                ? ` (${account.displayBalance})`
+                                : ""}
+                            </button>
+                          </div>
+                        )
+                      })()}
+                    </div>
+                  )
+                }}
+              </ConnectButton.Custom>
             </div>
           </div>
         </div>
