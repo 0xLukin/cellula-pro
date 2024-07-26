@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
-import { createPublicClient, http } from "viem"
+import { createPublicClient, http, parseGwei } from "viem"
 import { bsc } from "viem/chains"
 
 const customPublicClient = createPublicClient({
@@ -170,7 +170,8 @@ export default function KillCharge() {
         abi: KILL_CHARGE_ABI,
         functionName: "batchRecycle",
         args: [recycle_array, charge_ids],
-        account: address
+        account: address,
+        gasPrice: parseGwei("1")
       })
 
       const hash = await walletClient.writeContract(request)
