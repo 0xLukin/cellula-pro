@@ -286,6 +286,13 @@ export default function KillCharge() {
               {isCharging ? "充电中..." : "一键充电"}
             </Button>
           </div>
+          <p className="text-sm text-gray-600">
+            注意：每次充电最多处理100台机器，以避免数据过大导致交易卡住。
+          </p>
+          <p className="text-sm text-red-500 font-semibold">
+            重要：请仔细检查 MetaMask（小狐狸钱包）的 gas 是否设置为 1
+            gwei。MetaMask 有时会预设为 3 gwei，这会导致 gas 费用增加三倍。
+          </p>
           {error && <p className="text-red-500 mt-2 break-all">{error}</p>}
         </>
       )}
