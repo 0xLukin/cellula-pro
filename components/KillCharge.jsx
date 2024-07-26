@@ -289,6 +289,9 @@ export default function KillCharge() {
           <p className="text-sm text-gray-600">
             注意：每次充电最多处理100台机器，以避免数据过大导致交易卡住。
           </p>
+          <p className="text-sm text-gray-600">
+            注意：点击按钮后，由于数据量较大，请耐心等待交易弹出。如果无法弹出交易，请刷新页面后重试。
+          </p>
           <p className="text-sm text-red-500 font-semibold">
             重要：请仔细检查 MetaMask（小狐狸钱包）的 gas 是否设置为 1
             gwei。MetaMask 有时会预设为 3 gwei，这会导致 gas 费用增加三倍。

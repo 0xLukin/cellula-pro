@@ -3,6 +3,7 @@ import Head from "next/head"
 import styles from "../styles/Home.module.css"
 import MintCard from "@/components/MintCard"
 import KillCharge from "@/components/KillCharge"
+import { FaTwitter, FaTelegram } from "react-icons/fa" // 导入图标
 
 const Home = () => {
   return (
@@ -22,13 +23,26 @@ const Home = () => {
               <h1 className="text-2xl font-bold text-[#4CAF50] pixel-text">
                 Cellula Pro
               </h1>
+              <a
+                href="https://x.com/cellulapro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#4CAF50] hover:text-[#45a049]"
+              >
+                <FaTwitter size={24} />
+              </a>
+              <a
+                href="https://t.me/cellulapro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#4CAF50] hover:text-[#45a049]"
+              >
+                <FaTelegram size={24} />
+              </a>
             </div>
 
             <div className="flex items-center space-x-4">
               <ConnectButton />
-              {/* <Button className="bg-[#4CAF50] hover:bg-[#45a049] text-white font-bold py-2 px-4 transition duration-150 ease-in-out pixel-button">
-                开始使用
-              </Button> */}
             </div>
           </div>
         </div>
