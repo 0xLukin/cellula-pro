@@ -38,7 +38,7 @@ const NFT_ABI = [
 
 const NFT_CONTRACT_ADDRESS = "0xE62871d9AEa78A2BeD31d985135aC454037b8B2c"
 
-const GeneTable = ({ data, onMint, onGetPrice }) => {
+const GeneTable = ({ data, onMint }) => {
   const [quantities, setQuantities] = useState(data.map(() => 100))
 
   const handleQuantityChange = (index, value) => {
@@ -51,8 +51,9 @@ const GeneTable = ({ data, onMint, onGetPrice }) => {
     const mintButtons = document.querySelectorAll("[data-mint-button]")
     mintButtons.forEach((button) => button.click())
   }
+
   return (
-    <div>
+    <div className="overflow-x-auto">
       <div className="flex justify-end mb-4">
         <Button onClick={handleMintAll} variant="default" size="sm">
           Mint All
@@ -63,10 +64,10 @@ const GeneTable = ({ data, onMint, onGetPrice }) => {
         <TableHeader>
           <TableRow>
             <TableHead>Token ID</TableHead>
-            <TableHead>Living Num</TableHead>
-            <TableHead>Num Str</TableHead>
+            <TableHead className="hidden sm:table-cell">Living Num</TableHead>
+            <TableHead className="hidden sm:table-cell">Num Str</TableHead>
             <TableHead>Price (ETH)</TableHead>
-            <TableHead>Image</TableHead>
+            <TableHead className="hidden sm:table-cell">Image</TableHead>
             <TableHead>Quantity</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
@@ -75,10 +76,14 @@ const GeneTable = ({ data, onMint, onGetPrice }) => {
           {data.map((item, index) => (
             <TableRow key={item.tokenId}>
               <TableCell>{item.tokenId}</TableCell>
-              <TableCell>{item.livingNum}</TableCell>
-              <TableCell>{item.numStr}</TableCell>
-              <TableCell>{item.price.toFixed(18)}</TableCell>
-              <TableCell>
+              <TableCell className="hidden sm:table-cell">
+                {item.livingNum}
+              </TableCell>
+              <TableCell className="hidden sm:table-cell">
+                {item.numStr}
+              </TableCell>
+              <TableCell>{item.price.toFixed(8)}</TableCell>
+              <TableCell className="hidden sm:table-cell">
                 <Button
                   onClick={() => window.open(item.image, "_blank")}
                   variant="outline"
@@ -106,13 +111,6 @@ const GeneTable = ({ data, onMint, onGetPrice }) => {
                 >
                   Mint
                 </Button>
-                {/* <Button
-                onClick={() => onGetPrice(item.tokenId, quantities[index])}
-                variant="outline"
-                size="sm"
-              >
-                Get Price
-              </Button> */}
               </TableCell>
             </TableRow>
           ))}
@@ -246,8 +244,8 @@ export default function MintCard() {
   }
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 mx-auto">
-      <h2 className="text-2xl font-bold mb-4">铸造 NFT</h2>
+    <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 mx-auto max-w-full sm:max-w-4xl">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4">铸造 NFT</h2>
       {showProgress && (
         <div className="mb-4">
           <Progress value={progress} className="w-full" />
