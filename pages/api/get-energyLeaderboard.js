@@ -1,7 +1,11 @@
 // pages/api/energyLeaderboard.js
 
+export const config = {
+  runtime: "edge" // 指定在 Edge Runtime 上运行
+}
+
 const OKLINK_API_KEY = "bd571a43-7e0d-4626-a4b3-a46b567cfa60" // 替换为您的 Oklink API 密钥
-const TOKEN_CONTRACT_ADDRESS = "0xabd1780208a62b9cbf9d3b7a1617918d42493933" // 替换为您的合约地址\
+const TOKEN_CONTRACT_ADDRESS = "0xabd1780208a62b9cbf9d3b7a1617918d42493933" // 替换为您的合约地址
 const MAX_ADDRESSES = 400 // 需要获取的地址总数
 const LIMIT = 100 // 每次请求的地址数量
 
@@ -60,7 +64,7 @@ async function fetchEnergy(address) {
   }
 }
 
-export default async function handler(req, res) {
+export default async function handler(req) {
   try {
     // 获取 NFT 持有者地址
     const addresses = await fetchAddresses()
@@ -68,13 +72,24 @@ export default async function handler(req, res) {
     // 获取每个地址的能量信息
     const energyData = await Promise.all(addresses.map(fetchEnergy))
 
-    // 按能量排序并取前10
+    // 按能量排序并取前50
     const leaderboard = energyData
       .sort((a, b) => b.totalEnergy - a.totalEnergy)
       .slice(0, 50)
-    res.status(200).json(leaderboard)
+
+    return new Response(JSON.stringify(leaderboard), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: "获取能量排行榜失败" })
+    return new Response(JSON.stringify({ message: "获取能量排行榜失败" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
   }
 }
