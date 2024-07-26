@@ -48,13 +48,10 @@ const NFTCollection = ({ nfts }) => {
   const totalNFTs = nfts.length
 
   return (
-    <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-      <div className="flex w-max space-x-4 p-4">
+    <div className="w-full rounded-md  overflow-hidden">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {displayNFTs.map((nft) => (
-          <Card
-            key={nft.tokenId}
-            className="w-[200px] sm:w-[250px] flex-shrink-0"
-          >
+          <Card key={nft.tokenId} className="w-full">
             <CardContent className="p-2 sm:p-4">
               <img
                 src={nft.roleImage}
@@ -69,17 +66,16 @@ const NFTCollection = ({ nfts }) => {
           </Card>
         ))}
         {totalNFTs > 1 && (
-          <Card className="w-[200px] sm:w-[250px] flex-shrink-0 bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
+          <Card className="w-full bg-opacity-50 backdrop-blur-sm flex items-center justify-center min-h-[150px] sm:min-h-[200px]">
             <CardContent>
-              <p className="text-base sm:text-lg font-semibold">
+              <p className="text-base sm:text-lg font-semibold text-center">
                 共 {totalNFTs} 个 NFT
               </p>
             </CardContent>
           </Card>
         )}
       </div>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
+    </div>
   )
 }
 export default function KillCharge() {
@@ -200,7 +196,7 @@ export default function KillCharge() {
     }
   }
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 mx-auto">
+    <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 mx-auto max-w-full sm:max-w-3xl lg:max-w-4xl">
       <h2 className="text-xl sm:text-2xl font-bold mb-4">销毁换电</h2>
       {!address ? (
         <div className="text-center">

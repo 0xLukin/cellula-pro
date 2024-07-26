@@ -163,10 +163,11 @@ const Home = () => {
       <main
         className={`${styles.main} bg-white min-h-screen flex flex-col p-4 sm:p-6 lg:p-8`}
       >
-        <div className="flex-1 w-full h-full flex-row justify-between">
+        <div className="flex-1 w-full h-full flex justify-center">
+          {/* 修改这里 */}
           <div
             role="tablist"
-            className="tabs tabs-lifted h-full w-full sm:w-auto"
+            className="tabs tabs-lifted h-full w-full max-w-4xl"
           >
             <input
               type="radio"
