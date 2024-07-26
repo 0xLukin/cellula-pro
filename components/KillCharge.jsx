@@ -51,23 +51,29 @@ const NFTCollection = ({ nfts }) => {
     <ScrollArea className="w-full whitespace-nowrap rounded-md border">
       <div className="flex w-max space-x-4 p-4">
         {displayNFTs.map((nft) => (
-          <Card key={nft.tokenId} className="w-[250px] flex-shrink-0">
-            <CardContent className="p-4">
+          <Card
+            key={nft.tokenId}
+            className="w-[200px] sm:w-[250px] flex-shrink-0"
+          >
+            <CardContent className="p-2 sm:p-4">
               <img
                 src={nft.roleImage}
                 alt={`NFT ${nft.tokenId}`}
-                className="w-full h-[200px] object-cover rounded-md mb-2"
+                className="w-full h-[150px] sm:h-[200px] object-cover rounded-md mb-2"
               />
-              <h3 className="font-semibold">Token ID: {nft.tokenId}</h3>
-              <p>Hash Rate: {nft.hashRate}</p>
-              {/* <p>Mint Price: {nft.mintPrice}</p> */}
+              <h3 className="font-semibold text-sm sm:text-base">
+                Token ID: {nft.tokenId}
+              </h3>
+              <p className="text-xs sm:text-sm">Hash Rate: {nft.hashRate}</p>
             </CardContent>
           </Card>
         ))}
         {totalNFTs > 1 && (
-          <Card className="w-[250px] flex-shrink-0 bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
+          <Card className="w-[200px] sm:w-[250px] flex-shrink-0 bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
             <CardContent>
-              <p className="text-lg font-semibold">共 {totalNFTs} 个 NFT</p>
+              <p className="text-base sm:text-lg font-semibold">
+                共 {totalNFTs} 个 NFT
+              </p>
             </CardContent>
           </Card>
         )}
@@ -194,19 +200,21 @@ export default function KillCharge() {
     }
   }
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 mx-auto">
-      <h2 className="text-2xl font-bold mb-4">销毁换电</h2>
+    <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 mx-auto">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4">销毁换电</h2>
       {!address ? (
         <div className="text-center">
-          <p className="mb-4">请先连接您的钱包以使用此功能</p>
+          <p className="mb-4 text-sm sm:text-base">
+            请先连接您的钱包以使用此功能
+          </p>
         </div>
       ) : (
         <>
           <div className="mb-4 space-y-4">
-            <div className="flex items-center">
+            <div className="flex flex-col sm:flex-row sm:items-center">
               <label
                 htmlFor="destroyableThreshold"
-                className="w-64 text-sm font-medium text-gray-700"
+                className="w-full sm:w-64 text-sm font-medium text-gray-700 mb-2 sm:mb-0"
               >
                 可销毁 NFT 的 Hash Rate 上限：
               </label>
@@ -218,13 +226,13 @@ export default function KillCharge() {
                 onChange={(e) =>
                   setDestroyableThreshold(Number(e.target.value))
                 }
-                className="w-32"
+                className="w-full sm:w-32"
               />
             </div>
-            <div className="flex items-center">
+            <div className="flex flex-col sm:flex-row sm:items-center">
               <label
                 htmlFor="chargeableThreshold"
-                className="w-64 text-sm font-medium text-gray-700"
+                className="w-full sm:w-64 text-sm font-medium text-gray-700 mb-2 sm:mb-0"
               >
                 可充电 NFT 的 Hash Rate 下限：
               </label>
@@ -234,35 +242,46 @@ export default function KillCharge() {
                 placeholder="输入阈值"
                 value={chargeableThreshold}
                 onChange={(e) => setChargeableThreshold(Number(e.target.value))}
-                className="w-32"
+                className="w-full sm:w-32"
               />
             </div>
-            {/* <Button onClick={updateNFTCollections}>更新</Button> */}
           </div>
-          {isLoading && <p>加载中...</p>}
-          {error && <p className="text-red-500">错误: {error}</p>}
+          {isLoading && <p className="text-sm sm:text-base">加载中...</p>}
+          {error && (
+            <p className="text-red-500 text-sm sm:text-base">错误: {error}</p>
+          )}
           {!isLoading && !error && (
             <div>
-              <p className="mb-4">找到 {restingNFTs.length} 个休眠的 NFT</p>
+              <p className="mb-4 text-sm sm:text-base">
+                找到 {restingNFTs.length} 个休眠的 NFT
+              </p>
 
-              <h3 className="text-xl font-semibold mb-2">可销毁的 NFT</h3>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2">
+                可销毁的 NFT
+              </h3>
               {destroyableNFTs.length > 0 ? (
                 <NFTCollection nfts={destroyableNFTs} title="可销毁的 NFT" />
               ) : (
-                <p className="text-gray-500">没有找到可销毁的 NFT</p>
+                <p className="text-gray-500 text-sm sm:text-base">
+                  没有找到可销毁的 NFT
+                </p>
               )}
 
-              <h3 className="text-xl font-semibold my-4">可充电的 NFT</h3>
+              <h3 className="text-lg sm:text-xl font-semibold my-4">
+                可充电的 NFT
+              </h3>
               {chargeableNFTs.length > 0 ? (
                 <NFTCollection nfts={chargeableNFTs} title="可充电的 NFT" />
               ) : (
-                <p className="text-gray-500">没有找到可充电的 NFT</p>
+                <p className="text-gray-500 text-sm sm:text-base">
+                  没有找到可充电的 NFT
+                </p>
               )}
             </div>
           )}
-          <div className="flex items-center space-x-4 mt-4 mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-4 mb-2">
             <Select value={chargeDays} onValueChange={setChargeDays}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="选择充电天数" />
               </SelectTrigger>
               <SelectContent>
@@ -282,21 +301,26 @@ export default function KillCharge() {
                 destroyableNFTs.length < parseInt(chargeDays) ||
                 chargeableNFTs.length === 0
               }
+              className="w-full sm:w-auto"
             >
               {isCharging ? "充电中..." : "一键充电"}
             </Button>
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-xs sm:text-sm text-gray-600 mt-2">
             注意：每次充电最多处理100台机器，以避免数据过大导致交易卡住。
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-xs sm:text-sm text-gray-600 mt-1">
             注意：点击按钮后，由于数据量较大，请耐心等待交易弹出。如果无法弹出交易，请刷新页面后重试。
           </p>
-          <p className="text-sm text-red-500 font-semibold">
+          <p className="text-xs sm:text-sm text-red-500 font-semibold mt-1">
             重要：请仔细检查 MetaMask（小狐狸钱包）的 gas 是否设置为 1
             gwei。MetaMask 有时会预设为 3 gwei，这会导致 gas 费用增加三倍。
           </p>
-          {error && <p className="text-red-500 mt-2 break-all">{error}</p>}
+          {error && (
+            <p className="text-red-500 mt-2 break-all text-sm sm:text-base">
+              {error}
+            </p>
+          )}
         </>
       )}
     </div>
