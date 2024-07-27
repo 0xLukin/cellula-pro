@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
 import "@rainbow-me/rainbowkit/styles.css"
 import { configureChains, createConfig, WagmiConfig } from "wagmi"
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit"
+import {
+  getDefaultWallets,
+  RainbowKitProvider,
+  connectorsForWallets
+} from "@rainbow-me/rainbowkit"
 import {
   arbitrum,
   goerli,
@@ -12,6 +16,13 @@ import {
   bsc
 } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
+import {
+  metaMaskWallet,
+  okxWallet,
+  rainbowWallet,
+  coinbaseWallet,
+  walletConnectWallet
+} from "@rainbow-me/rainbowkit/wallets"
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -21,11 +32,19 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [publicProvider()]
 )
 
-const { connectors } = getDefaultWallets({
-  appName: "Dapp Forge",
-  projectId: "928c0944dc8279fb073a7405ecd6b657",
-  chains
-})
+const projectId = "928c0944dc8279fb073a7405ecd6b657"
+const connectors = connectorsForWallets([
+  {
+    groupName: "Popular",
+    wallets: [
+      metaMaskWallet({ projectId, chains }),
+      okxWallet({ projectId, chains }),
+      rainbowWallet({ projectId, chains }),
+      coinbaseWallet({ chains, appName: "GasLockR" }),
+      walletConnectWallet({ projectId, chains })
+    ]
+  }
+])
 
 const wagmiConfig = createConfig({
   autoConnect: true,
