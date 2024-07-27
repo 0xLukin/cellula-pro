@@ -101,7 +101,7 @@ const GeneTable = ({ data, onMint }) => {
                   max="100"
                   value={quantities[index]}
                   onChange={(e) => handleQuantityChange(index, e.target.value)}
-                  className="w-14"
+                  className="w-14 sm:w-20"
                 />
               </TableCell>
               <TableCell>
