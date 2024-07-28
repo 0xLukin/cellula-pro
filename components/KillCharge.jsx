@@ -167,16 +167,28 @@ export default function KillCharge() {
       if (recycle_array.length === 0) {
         throw new Error("没有足够的 NFT 进行充电")
       }
-      console.log("Recycle Array:", recycle_array)
-      console.log("Charge IDs:", charge_ids)
-      console.log("Charge Days:", chargeDays)
+      // console.log("Recycle Array:", recycle_array)
+      // console.log("Charge IDs:", charge_ids)
+      // console.log("Charge Days:", chargeDays)
 
+      const estimatedGas = await publicClient.estimateContractGas({
+        address: KILL_CHARGE_CONTRACT_ADDRESS,
+        abi: KILL_CHARGE_ABI,
+        functionName: "batchRecycle",
+        args: [recycle_array, charge_ids],
+        account: address
+      })
+
+      // 为了安全起见，将估算的 gas 增加 10%
+      const gasLimit = (BigInt(estimatedGas) * BigInt(105)) / BigInt(100)
+      console.log("gasLimit", gasLimit)
       const { request } = await publicClient.simulateContract({
         address: KILL_CHARGE_CONTRACT_ADDRESS,
         abi: KILL_CHARGE_ABI,
         functionName: "batchRecycle",
         args: [recycle_array, charge_ids],
         account: address,
+        gas: gasLimit, // 使用估算的 gas
         gasPrice: parseGwei("1")
       })
 
