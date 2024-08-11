@@ -95,6 +95,8 @@ export default function KillCharge() {
   const [isCharging, setIsCharging] = useState(false)
   const [chargeDays, setChargeDays] = useState("7")
 
+  const [maxChargeCount, setMaxChargeCount] = useState(100) //最大充电数量默认100
+
   useEffect(() => {
     const fetchRestingNFTs = async () => {
       if (!address) return
@@ -147,7 +149,6 @@ export default function KillCharge() {
       const charge_ids = []
 
       const ratio = parseInt(chargeDays)
-      const maxChargeCount = 100 // 设置最大充电数量为200
 
       for (
         let i = 0;
@@ -302,6 +303,13 @@ export default function KillCharge() {
                 <SelectItem value="7">7天</SelectItem>
               </SelectContent>
             </Select>
+            <Input
+              type="number"
+              value={maxChargeCount}
+              onChange={(e) => setMaxChargeCount(Number(e.target.value))}
+              placeholder="最大充电数量"
+              className="w-full sm:w-[180px]"
+            />
             <Button
               onClick={handleCharge}
               disabled={
