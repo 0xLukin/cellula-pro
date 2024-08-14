@@ -64,13 +64,23 @@ export default async function handler(request, response) {
   }
 
   try {
+    const token = "afb4ec71-15b7-4c4d-b32e-5d852bb0e9e4-1723646622094"
+
     const res = await fetch(
-      "https://factoryapi.cellula.life/cells?pageNum=1&pageSize=10000"
+      "https://factoryapi.cellula.life/cells?pageNum=1&pageSize=10000",
+      {
+        method: "GET", // 或者 "POST" 等其他请求方法
+        headers: {
+          "Content-Type": "application/json", // 如果需要发送 JSON 数据
+          Token: token // 添加 Authorization 请求头
+        }
+      }
     )
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`)
     }
     const data = await res.json()
+    console.log(data)
     let list = data.data.list
 
     // 获取所有tokenId
