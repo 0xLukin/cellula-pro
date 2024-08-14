@@ -52,8 +52,16 @@ async function fetchAddresses() {
 }
 
 async function fetchEnergy(address) {
+  const token = "afb4ec71-15b7-4c4d-b32e-5d852bb0e9e4-1723646622094"
   const response = await fetch(
-    `https://factoryapi.cellula.life/miningInfo?ethAddress=${address}`
+    `https://factoryapi.cellula.life/miningInfo?ethAddress=${address}`,
+    {
+      method: "GET", // 或者 "POST" 等其他请求方法
+      headers: {
+        "Content-Type": "application/json", // 如果需要发送 JSON 数据
+        Token: token // 添加 Authorization 请求头
+      }
+    }
   )
 
   const data = await response.json()
