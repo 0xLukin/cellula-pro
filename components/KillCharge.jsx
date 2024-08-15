@@ -78,7 +78,7 @@ const NFTCollection = ({ nfts }) => {
     </div>
   )
 }
-export default function KillCharge() {
+export default function KillCharge({ walletkey }) {
   const [restingNFTs, setRestingNFTs] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -103,7 +103,9 @@ export default function KillCharge() {
 
       setIsLoading(true)
       try {
-        const response = await fetch(`/api/get-restingnft?address=${address}`)
+        const response = await fetch(
+          `/api/get-restingnft?address=${address}&token=${localStorage.getItem(address)}`
+        )
         if (!response.ok) {
           throw new Error("获取数据失败")
         }

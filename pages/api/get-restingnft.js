@@ -8,6 +8,8 @@ export default async function handler(req) {
   if (req.method === "GET") {
     const url = new URL(req.url)
     const address = url.searchParams.get("address")
+    const token = url.searchParams.get("token")
+    console.log("get-rest-token", token)
 
     if (!address) {
       return new Response(JSON.stringify({ error: "缺少地址参数" }), {
@@ -17,7 +19,7 @@ export default async function handler(req) {
     }
 
     try {
-      const token = "afb4ec71-15b7-4c4d-b32e-5d852bb0e9e4-1723646622094"
+      // const token = "afb4ec71-15b7-4c4d-b32e-5d852bb0e9e4-1723646622094"
       const response = await fetch(
         `https://factoryapi.cellula.life/myRestingLives?ethAddress=${address}&pageSize=100000`,
         {
@@ -28,6 +30,7 @@ export default async function handler(req) {
           }
         }
       )
+      console.log("get-rest-response", response)
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)

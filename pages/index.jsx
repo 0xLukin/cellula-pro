@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { darkTheme } from "@rainbow-me/rainbowkit"
 import Head from "next/head"
@@ -6,8 +7,12 @@ import MintCard from "@/components/MintCard"
 import KillCharge from "@/components/KillCharge"
 import { FaTwitter, FaTelegram } from "react-icons/fa" // 导入图标
 import Image from "next/image"
+import { useAccount, useSignMessage } from "wagmi"
 
 const Home = () => {
+  const { address, isConnected } = useAccount()
+  const { signMessageAsync } = useSignMessage()
+  const [walletKey, setWalletKey] = useState(null)
   const customTheme = darkTheme({
     accentColor: "#44cccc",
     accentColorForeground: "white",
@@ -15,6 +20,63 @@ const Home = () => {
     fontStack: "system",
     overlayBlur: "small"
   })
+
+  useEffect(() => {
+    const getWalletKey = async () => {
+      if (typeof window !== "undefined" && isConnected && address) {
+        let storedKey = localStorage.getItem(address)
+
+        if (!storedKey) {
+          try {
+            // 获取要签名的消息
+            const messageResponse = await fetch(
+              `/api/get-message?ethAddress=${address}`
+            )
+            if (!messageResponse.ok) {
+              throw new Error("Failed to get message for signing")
+            }
+            const messageData = await messageResponse.json()
+            const messageToSign = messageData.data
+
+            // 签名消息
+            const signature = await signMessageAsync({ message: messageToSign })
+            console.log("signature", signature)
+
+            // 调用登录API获取walletKey
+            const loginResponse = await fetch("/api/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                ethAddress: address,
+                hash: signature,
+                txt: messageToSign
+              })
+            })
+
+            if (loginResponse.ok) {
+              const loginData = await loginResponse.json()
+              console.log("loginData", loginData)
+              const key = loginData.data
+              localStorage.setItem(address, key)
+              setWalletKey(key)
+            } else {
+              console.error("Failed to get wallet key from API")
+            }
+          } catch (error) {
+            console.error("Error during signing or API call:", error)
+          }
+        } else {
+          setWalletKey(storedKey)
+        }
+      }
+    }
+
+    getWalletKey()
+  }, [address, isConnected, signMessageAsync])
+
+  // ... 其余代码保持不变
   return (
     <div className={styles.container}>
       <Head>
@@ -195,7 +257,7 @@ const Home = () => {
               role="tabpanel"
               className="tab-content bg-base-100 border-base-300 rounded-box p-4 sm:p-6"
             >
-              <KillCharge />
+              <KillCharge walletkey={walletKey} />
             </div>
           </div>
         </div>
